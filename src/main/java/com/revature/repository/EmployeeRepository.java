@@ -7,11 +7,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.model.Employee;
+import com.revature.model.Employee;   
 import com.revature.utils.ConnectionUtil;
 
 public class EmployeeRepository {
     
+    // Method to save an employee to our DB
     public void Save(Employee employee) {
         
         // Saves to the Employee table of our database
@@ -33,6 +34,7 @@ public class EmployeeRepository {
         }
     }
 
+    // Method to retrieve an exhaustive list of employees within the database
     public List<Employee> getAllEmployees() {
         String empSelect = "select * from employees";
         List<Employee> listOfEmployees = new ArrayList<Employee>();

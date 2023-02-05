@@ -1,7 +1,9 @@
 package com.revature.service;
 
 import java.io.IOException;
+import java.util.List;
 
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -11,17 +13,19 @@ import com.revature.repository.EmployeeRepository;
 
 public class EmployeeService {
     
-    // Register an employee in our database if they are not already in it
+    private final EmployeeRepository repo = new EmployeeRepository();
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    //================ Dependency Injection ========================
+
+    // Create a constructor and add in the parameters the class dependency
+    
+    // Register an employee in our database (later desired feature: if they are not already in it)
     public void register(String empJson) {
 
-        EmployeeRepository empRepo = new EmployeeRepository();
-
-        // We need to map the controller response with an ObjectMapper object
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
+    try {
             Employee newEmployee = mapper.readValue(empJson, Employee.class);
-            empRepo.Save(newEmployee);
+            repo.Save(newEmployee);
 
         } catch (JsonParseException e) {
             e.printStackTrace();
@@ -30,5 +34,25 @@ public class EmployeeService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // Convert a List into a Json String
+    public String getAllEmps() {
+
+        List<Employee> listofEmps = repo.getAllEmployees();
+        String jsonString = "";
+
+        try {
+            jsonString = mapper.writeValueAsString(listofEmps);
+        
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return jsonString;
     }
 }
